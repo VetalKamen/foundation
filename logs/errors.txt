@@ -1,0 +1,8 @@
+
+CustomHttpClient exception in the Adapter::GET| Message:Unable to read stream contents| Report has been generated at:2021-04-20 20:32:32
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:38:24
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:38:52
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:39:02
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:39:48
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:39:54
+CustomHttpClient exception in the Adapter::GET| Message:No handler has been specified| Report has been generated at:2021-04-20 20:40:32
