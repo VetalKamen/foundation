@@ -12,7 +12,7 @@
 <body>
 <h1>Cat RESTful API</h1>
 <div>
-    <a href="./index_breed.php"> Breeds list </a>
-    <a href="./index_category.php"> Categories list </a>
-    <a href="./index.php"> Search list </a>
+    <a href="./view_breed.php"> Breeds list </a>
+    <a href="./view_category.php"> Categories list </a>
+    <a href="./view_search.php"> Search list </a>
 </div>

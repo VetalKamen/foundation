@@ -2,5 +2,5 @@
 
 interface CustomHttpClientFactoryInterface
 {
-    public static function createCustomHttpClient($handler);
+    public static function createCustomHttpClient();
 }

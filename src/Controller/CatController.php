@@ -16,17 +16,6 @@ require_once dirname(__DIR__) . '/Factory/CustomCacheFactories/RedisCacheFactory
 
 require_once dirname(__DIR__) . '/Proxy/ProxyCustomHttpClientHandler.php';
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\RejectedPromise;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\Psr7;
-
 class CatController
 {
     /**
@@ -54,46 +43,13 @@ class CatController
     }
 }
 
-
 $file_logger = FileCustomLoggerFactoryImpl::createCustomLogger($_SERVER['DOCUMENT_ROOT'] . '/logs/errors.txt');
 
 $redis_cache_client = RedisCustomCacheFactoryImpl::createCustomCacheClient();
 
-function add_response_handler($cacheClient)
-{
-    return function (callable $handler) use ($cacheClient) {
-        return function (
-            RequestInterface $request,
-            array $options
-        ) use ($handler, $cacheClient) {
-            $cacheKey = sha1((string)$request->getUri());
-
-            if ($cachedResponse = unserialize($cacheClient->get($cacheKey))) {
-
-                return new FulfilledPromise($cachedResponse);
-            }
-            $promise = $handler($request, $options);
-
-            return $promise->then(
-                function (ResponseInterface $response) use ($cacheKey, $cacheClient) {
-                    $cacheClient->set($cacheKey, serialize($response));
-
-                    return $response;
-                }
-            );
-        };
-    };
-}
-
-$stack = HandlerStack::create();
-$stack->setHandler(new CurlHandler());
-$stack->push(add_response_handler($redis_cache_client));
-
-
-$guzzle_client = GuzzleCustomHttpClientFactoryImpl::createCustomHttpClient($stack);
+$guzzle_client = GuzzleCustomHttpClientFactoryImpl::createCustomHttpClientWithHandler($redis_cache_client);
 $http_client   = new CustomHttpClient(new CustomHttpClientAdapter($guzzle_client));
 
-$proxy_http_client = new ProxyCustomHttpClientHandler($http_client, $file_logger, $redis_cache_client);
+$proxy_http_client = new ProxyCustomHttpClientHandler($http_client, $file_logger);
 
 $cat_controller = new CatController($proxy_http_client);
-

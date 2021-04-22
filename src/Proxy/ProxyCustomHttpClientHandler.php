@@ -1,10 +1,8 @@
 <?php
 
-use GuzzleHttp\Promise\FulfilledPromise;
-
+require_once dirname(dirname(__DIR__)) . '/functions.php';
 require_once dirname(__DIR__) . '/Adapter/CustomClientInterface.php';
 require_once dirname(__DIR__) . '/Adapter/CustomHttpClient.php';
-require_once dirname(dirname(__DIR__)) . '/functions.php';
 require_once dirname(__DIR__) . '/Factory/CustomLoggerFactories/FileLoggerFactory/Logger/FileLogger.php';
 
 class ProxyCustomHttpClientHandler implements CustomClientInterface
@@ -19,16 +17,12 @@ class ProxyCustomHttpClientHandler implements CustomClientInterface
      */
     private $fileLogger;
 
-    private $cacheClient;
-
     public function __construct(
         CustomClientInterface $realClient,
-        CustomLoggerInterface $logger,
-        $cacheClient
+        CustomLoggerInterface $logger
     ) {
-        $this->realClient  = $realClient;
-        $this->fileLogger  = $logger;
-        $this->cacheClient = $cacheClient;
+        $this->realClient = $realClient;
+        $this->fileLogger = $logger;
     }
 
     public function get(string $uri, array $options = [])

@@ -25,12 +25,13 @@ class CatSearchController
         $this->client = $client;
     }
 
-    public function searchByID($id = '')
+    public function default_search($breed_id = '',$category_id = '', $filetype = '', $page = '')
     {
         $request = CustomRequestDirector::build(new CatSearchRequestBuilder(new CustomRequest()));
-        if ( ! empty($id)) {
-            return $this->client->get($request->endpoint . '/' . $id);
-        }
+        $request->set_param_to_query('breed_ids', $breed_id);
+        $request->set_param_to_query('category_ids', $category_id);
+        $request->set_param_to_query('mime_types', $filetype);
+        $request->set_param_to_query('page', $page);
 
         return $this->client->get($request->endpoint);
     }
@@ -40,9 +41,9 @@ $file_logger = FileCustomLoggerFactoryImpl::createCustomLogger($_SERVER['DOCUMEN
 
 $redis_cache_client = RedisCustomCacheFactoryImpl::createCustomCacheClient();
 
-$guzzle_client = GuzzleCustomHttpClientFactoryImpl::createCustomHttpClient();
+$guzzle_client = GuzzleCustomHttpClientFactoryImpl::createCustomHttpClientWithHandler($redis_cache_client);
 $http_client   = new CustomHttpClient(new CustomHttpClientAdapter($guzzle_client));
 
-$proxy_http_client = new ProxyCustomHttpClientHandler($http_client, $file_logger, $redis_cache_client);
+$proxy_http_client = new ProxyCustomHttpClientHandler($http_client, $file_logger);
 
 $cat_search_controller = new CatSearchController($proxy_http_client);

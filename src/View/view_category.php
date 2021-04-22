@@ -8,10 +8,10 @@ $categories = \json_decode($response->getBody()->getContents());
 
 <?php include 'templates/header.php'; ?>
     <div class="container flexbox">
+        All available categories:
         <?php foreach ($categories as $category): ?>
             <div>
-                <h3>Name:<?php echo $category->name; ?></h3>
-                <h3>Name:<?php echo $categories; ?></h3>
+                <h3><?php echo $category->name; ?></h3>
             </div>
         <?php endforeach; ?>
     </div>
